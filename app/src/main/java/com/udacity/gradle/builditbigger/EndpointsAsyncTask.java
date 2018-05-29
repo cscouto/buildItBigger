@@ -3,8 +3,6 @@ package com.udacity.gradle.builditbigger;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.util.Pair;
-import android.widget.Toast;
 
 import com.cs.tiago.customlib.LibActivity;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -31,7 +29,6 @@ class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
                             abstractGoogleClientRequest.setDisableGZipContent(true);
                         }
                     });
-            // end options for devappserver
 
             myApiService = builder.build();
         }
