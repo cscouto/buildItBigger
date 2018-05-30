@@ -6,25 +6,25 @@ import android.test.AndroidTestCase;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.CountDownLatch;
 
 @RunWith(AndroidJUnit4.class)
 public class DataTest extends AndroidTestCase{
 
     @Test
-    public void verifyResponse(){
+    public void verifyResponse() throws InterruptedException {
         EndpointsAsyncTask test =  new EndpointsAsyncTask();
-        test.execute(InstrumentationRegistry.getContext());
-        String joke = null;
-        try {
-            joke = test.get(5, TimeUnit.SECONDS);
-        } catch (InterruptedException | TimeoutException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        assert !Objects.requireNonNull(joke).isEmpty();
+
+        final CountDownLatch signal = new CountDownLatch(1);
+
+        test.callback = new EndpointsAsyncTask.Callback() {
+            @Override
+            public void onPostExecute(String result) {
+                assert !result.isEmpty();
+                signal.countDown();
+            }
+        };
+        signal.await();
+        test.execute(InstrumentationRegistry.getContext()).execute();
     }
 }

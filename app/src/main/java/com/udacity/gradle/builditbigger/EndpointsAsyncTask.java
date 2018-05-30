@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.cs.tiago.customlib.Constants;
 import com.cs.tiago.customlib.LibActivity;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -16,6 +17,12 @@ import java.io.IOException;
 class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
     private static MyApi myApiService = null;
     private Context context;
+
+    public interface Callback {
+        void onPostExecute(String result);
+    }
+
+    Callback callback;
 
     @Override
     protected String doInBackground(Context... params) {
@@ -44,8 +51,12 @@ class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        Intent intent = new Intent(context, LibActivity.class);
-        intent.putExtra("joke", result);
-        context.startActivity(intent);
+        if (callback != null){
+            callback.onPostExecute(result);
+        }else {
+            Intent intent = new Intent(context, LibActivity.class);
+            intent.putExtra(Constants.EXTRA_KEY_JOKE, result);
+            context.startActivity(intent);
+        }
     }
 }

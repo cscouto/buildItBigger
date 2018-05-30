@@ -15,8 +15,8 @@ public class LibActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.textView);
         Intent intent = getIntent();
 
-        if (intent.hasExtra("joke")){
-            textView.setText(intent.getStringExtra("joke"));
+        if (intent.hasExtra(Constants.EXTRA_KEY_JOKE)){
+            textView.setText(intent.getStringExtra(Constants.EXTRA_KEY_JOKE));
         }
     }
 }
